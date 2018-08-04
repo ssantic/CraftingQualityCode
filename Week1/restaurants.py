@@ -98,6 +98,17 @@ def filter_by_cuisine(names_matching_price, cuisine_to_names, cuisines_list):
     ['Queen St. Cafe', 'Dumplings R Us']
     """
 
+    filtered_names = []
+
+    # Populate the list of cuisine matches with restaurant names
+    for name in names_matching_price:
+        for cuisine in cuisine_to_names.keys():
+            if name in cuisine_to_names[cuisine][0] and name not in filtered_names:
+                filtered_names.append(name)
+
+    # Return a list of unique retaurant names
+    return filtered_names
+
 
 def read_restaurants(file):
     """ (file) -> (dict, dict, dict)
@@ -124,6 +135,7 @@ def read_restaurants(file):
         price_to_names[restaurant_data[i]].append(restaurant_data[i - 2])
 
     # Populate the dictionary of cuisine: list of restaurant name pairs
+    # TODO: Refactor this to be done in one loop
     # Populate the keys first with empty lists
     for i in range(3, len(restaurant_data), 4):
         cuisines = restaurant_data[i].split(',')
@@ -160,4 +172,12 @@ def restaurant_list(file):
 
 
 # Testing the code
-print(read_restaurants('C:/LearnToProgram/Week1/restaurants.txt'))
+names = ['Queen St. Cafe', 'Dumplings R Us', 'Deep Fried Everything']
+cuis = {'Canadian': ['Georgie Porgie'],
+     'Pub Food': ['Georgie Porgie', 'Deep Fried Everything'],
+     'Malaysian': ['Queen St. Cafe'],
+     'Thai': ['Queen St. Cafe'],
+     'Chinese': ['Dumplings R Us'],
+     'Mexican': ['Mexican Grill']}
+cuisines = ['Chinese', 'Thai']
+print(filter_by_cuisine(names, cuis, cuisines))

@@ -109,12 +109,21 @@ def read_restaurants(file):
     - a dict of {cusine: list of restaurant names}
     """
 
-    restaurants_data = restaurant_list(file)
+    restaurant_data = restaurant_list(file)
 
     name_to_rating = {}
     price_to_names = {'$': [], '$$': [], '$$$': [], '$$$$': []}
     cuisine_to_names = {}
 
+    # Populate the dictionary with name: rating% pairs
+    for i in range(0, len(restaurant_data), 4):
+        name_to_rating[restaurant_data[i]] = restaurant_data[i + 1]
+
+    # Populate the dictionary with price: list of restaurant name pairs
+    for i in range(2, len(restaurant_data), 4):
+        price_to_names[restaurant_data[i]].append(restaurant_data[i - 2])
+
+    return name_to_rating, price_to_names, cuisine_to_names
 
 
 def restaurant_list(file):

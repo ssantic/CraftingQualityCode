@@ -82,6 +82,14 @@ def build_rating_list(name_to_rating, names_final):
     [[82, 'Queen St. Cafe'], [71, 'Dumplings R Us']]
     """
 
+    rated_name_pairs = []
+    for name in names_final:
+        if name in name_to_rating.keys():
+            pair = [name_to_rating[name], name]
+            rated_name_pairs.append(pair)
+
+    return rated_name_pairs
+
 
 def filter_by_cuisine(names_matching_price, cuisine_to_names, cuisines_list):
     """ (list of str, dict of {str: list of str}, list of str) -> list of str
@@ -169,15 +177,3 @@ def restaurant_list(file):
     lines = [line for line in lines if len(line) > 0]
 
     return lines
-
-
-# Testing the code
-names = ['Queen St. Cafe', 'Dumplings R Us', 'Deep Fried Everything']
-cuis = {'Canadian': ['Georgie Porgie'],
-     'Pub Food': ['Georgie Porgie', 'Deep Fried Everything'],
-     'Malaysian': ['Queen St. Cafe'],
-     'Thai': ['Queen St. Cafe'],
-     'Chinese': ['Dumplings R Us'],
-     'Mexican': ['Mexican Grill']}
-cuisines = ['Chinese', 'Thai']
-print(filter_by_cuisine(names, cuis, cuisines))

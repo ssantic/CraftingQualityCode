@@ -109,6 +109,33 @@ def read_restaurants(file):
     - a dict of {cusine: list of restaurant names}
     """
 
+    restaurants_data = restaurant_list(file)
+
     name_to_rating = {}
     price_to_names = {'$': [], '$$': [], '$$$': [], '$$$$': []}
     cuisine_to_names = {}
+
+
+
+def restaurant_list(file):
+    """ (file) -> (list)
+    Return a list of strings based on information in the file, with the
+    newline and empty strings (lines) removed lines.
+    """
+
+    # Open and read in the raw text file
+    f = open(file, 'r')
+    lines = f.readlines()
+    f.close()
+
+    # Clean the newlines
+    lines = [line.strip() for line in lines]
+
+    # Remove the empty strings
+    lines = [line for line in lines if len(line) > 0]
+
+    return lines
+
+
+# Testing the code
+print(read_restaurants('C:/LearnToProgram/Week1/restaurants.txt'))

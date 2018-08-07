@@ -22,7 +22,7 @@ class TestStockPriceSummary(unittest.TestCase):
 
     def test_one_loss(self):
     """Test just one loss as input."""
-    	actual = a1.stock_price_summary(0.16)
+    	actual = a1.stock_price_summary(-0.16)
     	expected = (0, -0.16)
 
     	self.assertEqual(actual, expected)

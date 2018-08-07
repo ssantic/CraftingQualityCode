@@ -60,7 +60,8 @@ def swap_k(L, k):
     middle_items = L[k:-k]
 
     # Return the flattened swapped list
-    L = sum([last_k_items, middle_items, first_k_items], [])
+    if len(L) != 0:
+        L = sum([last_k_items, middle_items, first_k_items], [])
 
     return L
 

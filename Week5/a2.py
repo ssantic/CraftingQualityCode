@@ -100,3 +100,93 @@ class Maze:
     """ A 2D maze. """
 
     # Write your Maze methods here.
+    def __init__(self, maze, rat_1, rat_2):
+        """(Maze, list of list of str, Rat, Rat) -> NoneType
+
+        Initialize the maze's four instance variables:
+
+        maze - contents of maze (walls, sprouts etc)
+        rat_1 - first rat
+        rat_2 - second rat
+        num_sprouts_left - number of uneaten sprouts
+
+        >>> maze = Maze([['#','#','#'],\
+                         ['#','.','#'],\
+                         ['#','@','#'],\
+                         ['#','#','#']],\
+                         Rat('J', 1, 1),\
+                         Rat('G', 2, 1))
+        >>> maze.maze[0][1]
+        '#'
+        >>> maze.maze[2][1]
+        '@'
+        >>> maze.rat_1.row
+        1
+        """
+        self.maze = maze
+        self.rat_1 = rat_1
+        self.rat_2 = rat_2
+        self.num_sprouts_left = 0
+
+        for element in sum(self.maze, []):
+            if element == SPROUT:
+                self.num_sprouts_left += 1
+
+    def is_wall(self, row, col):
+        """(Maze, int, int) -> bool
+
+        Check whether the field in the Maze is a wall
+
+        >>> maze = Maze([['#','#','#'],\
+                         ['#','.','#'],\
+                         ['#','@','#'],\
+                         ['#','#','#']],\
+                         Rat('J', 1, 1),\
+                         Rat('G', 2, 1))
+
+        >>> maze.is_wall(0, 0)
+        True
+        >>> maze.is_wall(1, 1)
+        False
+        """
+        return self.maze[row][col] == WALL
+
+    def get_character(self, row, col):
+        """
+        (Maze, int, int) -> str
+
+        Return the character in the Maze at the given row and column
+
+        >>> maze = Maze([['#','#','#'],\
+                         ['#','.','#'],\
+                         ['#','@','#'],\
+                         ['#','#','#']],\
+                         Rat('J', 1, 1),\
+                         Rat('G', 2, 1))
+
+        >>> maze.get_character(0, 0)
+        '#'
+        >>> maze.get_character(1, 1)
+        'J'
+        """
+        if (self.rat_1.row == row and self.rat_1.col == col):
+            return self.rat_1.symbol
+        elif (self.rat_2.row == row and self.rat_2.col == col):
+            return self.rat_2.symbol
+        else:
+            return self.maze[row][col]
+
+    def move(self, rat, vertical, horizontal):
+        """(Maze, Rat, int, int) -> bool
+        """
+        new_position = (rat.row + vertical, rat.col + horizontal)
+
+        if self.is_wall(new_position[0], new_position[1]):
+            return False
+        else:
+            rat.set_location(new_position[0], new_position[1])
+            if self.get_character(new_position[0], new_position[1]) == SPROUT:
+                rat.eat_sprout()
+                self.maze[new_position[0]][new_position[1]] = HALL
+                self.num_sprouts_left -= 1
+            return True

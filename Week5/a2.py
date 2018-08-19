@@ -76,6 +76,8 @@ class Rat:
         Eat a sprout in the Maze
 
         >>> rat = Rat('P', 2, 3)
+        >>> rat.num_sprouts_eaten
+        0
         >>> rat.eat_sprout()
         >>> rat.num_sprouts_eaten
         1
@@ -90,7 +92,7 @@ class Rat:
 
         >>> rat = Rat('P', 2, 3)
         >>> print(rat)
-        'J at (2, 3) ate 2 sprouts.'
+        P at (2, 3) ate 0 sprouts.
         """
         return "{} at ({}, {}) ate {} sprouts.".format(
             self.symbol, self.row, self.col, self.num_sprouts_eaten)
@@ -178,15 +180,62 @@ class Maze:
 
     def move(self, rat, vertical, horizontal):
         """(Maze, Rat, int, int) -> bool
+        >>> rat_1 = Rat('J', 1, 1)
+        >>> rat_2 = Rat('P', 2, 2)
+        >>> maze = Maze([['#','#','#'],\
+                         ['#','.','#'],\
+                         ['#','@','#'],\
+                         ['#','#','#']],\
+                         rat_1,\
+                         rat_2)
+        >>> maze.move(rat_1, DOWN, NO_CHANGE)
+        True
+        >>> rat_1.num_sprouts_eaten
+        1
         """
         new_position = (rat.row + vertical, rat.col + horizontal)
 
         if self.is_wall(new_position[0], new_position[1]):
             return False
         else:
-            rat.set_location(new_position[0], new_position[1])
             if self.get_character(new_position[0], new_position[1]) == SPROUT:
                 rat.eat_sprout()
                 self.maze[new_position[0]][new_position[1]] = HALL
                 self.num_sprouts_left -= 1
+            rat.set_location(new_position[0], new_position[1])
             return True
+
+    def __str__(self):
+        """(Maze) -> str
+        >>> rat_1 = Rat('J', 1, 1)
+        >>> rat_2 = Rat('P', 2, 2)
+        >>> maze = Maze([['#','#','#','#'],\
+                         ['#','.','.','#'],\
+                         ['#','@','.','#'],\
+                         ['#','#','#','#']],\
+                         rat_1,\
+                         rat_2)
+        >>> print(maze)
+        ####
+        #J.#
+        #@P#
+        ####
+        J at (1, 1) ate 0 sprouts.
+        P at (2, 2) ate 0 sprouts.
+        """
+
+        result = ''
+        for irow in range(len(self.maze)):
+            for icol in range(len(self.maze[irow])):
+                result += self.get_character(irow, icol)
+            result += '\n'
+        result += self.rat_1.__str__()
+        result += '\n'
+        result += self.rat_2.__str__()
+
+        return result
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+
